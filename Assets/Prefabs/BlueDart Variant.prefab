@@ -15,17 +15,17 @@ PrefabInstance:
     - target: {fileID: 7362519291145507254, guid: 64a14b2ea358e0546aee7e27dfc15c8d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.268
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7362519291145507254, guid: 64a14b2ea358e0546aee7e27dfc15c8d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7362519291145507254, guid: 64a14b2ea358e0546aee7e27dfc15c8d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.533
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7362519291145507254, guid: 64a14b2ea358e0546aee7e27dfc15c8d,
         type: 3}
@@ -85,7 +85,7 @@ PrefabInstance:
     - target: {fileID: 9018285344665115007, guid: 64a14b2ea358e0546aee7e27dfc15c8d,
         type: 3}
       propertyPath: m_Name
-      value: BlueDart
+      value: BlueDart Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64a14b2ea358e0546aee7e27dfc15c8d, type: 3}
