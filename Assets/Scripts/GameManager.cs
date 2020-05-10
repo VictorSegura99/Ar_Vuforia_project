@@ -19,9 +19,7 @@ public class GameManager : MonoBehaviour
     // Internal variables
     List<GameObject> current_darts = new List<GameObject>();
     bool dart_taken = false;
-    bool dart_in_position = false;
     float time_at_lerp_start = 0.0f;
-    bool lerping_dart = false;
     Transform original_dart_transform;
 
     // Players
@@ -46,27 +44,11 @@ public class GameManager : MonoBehaviour
         {
             if (!dart_taken)
             {
-                TakeDart();
+                StartCoroutine("TakeDart");
             }
-            else if (dart_taken && dart_in_position) 
+            else  
             {
                 ThrowDart();
-            }
-        }
-
-        if (lerping_dart)
-        {
-            float t = (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time;
-
-            Vector3.Lerp(original_dart_transform.localPosition, new Vector3(0, -0.45f, 1.25f), t);
-            Quaternion.Lerp(original_dart_transform.localRotation, Quaternion.Euler(0, 180, 0), t);
-
-            if (t >= 1)
-            {
-                current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
-                current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
-                dart_in_position = true;
-                lerping_dart = false;
             }
         }
     }
@@ -98,43 +80,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void TakeDart()
+    void ThrowDart()
     {
-        dart_taken = true;
+        dart_taken = false;
+        current_darts.Last().GetComponent<Rigidbody>().AddForce(current_darts.Last().transform.forward * 50);
+        current_darts.Last().GetComponent<Rigidbody>().useGravity = true;
+    }
 
+    IEnumerator TakeDart()
+    {
         current_darts.Last().transform.SetParent(GameObject.Find("ARCamera").transform);
         original_dart_transform = current_darts.Last().transform;
 
         time_at_lerp_start = Time.realtimeSinceStartup;
 
-        // Lerp to camera
-        //StartCoroutine("LerpToCamera");
-        lerping_dart = true;
+        while (((Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time) < 1.0f)
+        {
+            Vector3.Lerp(original_dart_transform.localPosition, new Vector3(0, -0.45f, 1.25f), (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time);
+            Quaternion.Lerp(original_dart_transform.localRotation, Quaternion.Euler(0, 180, 0), (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time);
+          
+            yield return new WaitForEndOfFrame();
+        }
+
+        current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
+        current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
+        dart_taken = true;
     }
-
-    void ThrowDart()
-    {
-        dart_in_position = false;
-        current_darts.Last().GetComponent<Rigidbody>().AddForce(current_darts.Last().transform.forward * 50);
-        current_darts.Last().GetComponent<Rigidbody>().useGravity = true;
-    }
-
-    //IEnumerator LerpToCamera()
-    //{
-    //    float t = (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time;
-
-    //    Vector3.Lerp(original_dart_transform.localPosition, new Vector3(0, -0.45f, 1.25f), t);
-    //    Quaternion.Lerp(original_dart_transform.localRotation, Quaternion.Euler(0, 180, 0), t);
-
-    //    if (t >= 1)
-    //    {
-    //        current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
-    //        current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
-    //        dart_in_position = true;
-    //        StopCoroutine("LerpToCamera");
-    //    }
-
-    //    Debug.Log("1 cicle");
-    //    yield return new WaitForFixedUpdate();
-    //}
 }
