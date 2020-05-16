@@ -46,6 +46,10 @@ public class GameManager : MonoBehaviour
     int total_round = 6;
     int current_round = 0;
 
+    bool inDart = false;
+
+    public GameObject nextScene = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,7 +64,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && activeDart == null)
+        if(Input.GetKeyDown(KeyCode.Space) && activeDart == null && !inDart)
         {
             StartCoroutine(TakeDart());
         }
@@ -85,7 +89,7 @@ public class GameManager : MonoBehaviour
         if (current_round > total_round)
         {
             GameObject.Find("ARScene").SetActive(false);
-            GameObject.Find("PointsScene").SetActive(true);
+            nextScene.SetActive(true);
         }
         else {
             current_player = players[player_index];
@@ -115,6 +119,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TakeDart()
     {
+        inDart = true;
         if (activeDart != null)
         {
             Destroy(activeDart.gameObject);
@@ -143,5 +148,6 @@ public class GameManager : MonoBehaviour
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
         }
+        inDart = false;
     }
 }
