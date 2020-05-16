@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
 
         current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
         current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
+        current_darts.Last().GetComponent<Dart>().isActive = true;
         dart_taken = true;
     }
 }

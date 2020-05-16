@@ -10,6 +10,8 @@ public class Dart : MonoBehaviour
 
     Rigidbody rb;
 
+    public bool isActive = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -18,6 +20,11 @@ public class Dart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         // if you touch the screen
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
