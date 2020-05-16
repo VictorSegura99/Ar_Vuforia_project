@@ -25,6 +25,11 @@ public class Dart : MonoBehaviour
             return;
         }
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject.Find("GameManager").GetComponent<GameManager>().DartThrown();
+        }
+
         // if you touch the screen
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
