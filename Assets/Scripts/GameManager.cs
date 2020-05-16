@@ -84,7 +84,8 @@ public class GameManager : MonoBehaviour
 
         if (current_round > total_round)
         {
-            // TODO: Change scene to points scene, better just remove all and keep this scene 
+            GameObject.Find("ARScene").SetActive(false);
+            GameObject.Find("PointsScene").SetActive(true);
         }
         else {
             current_player = players[player_index];
