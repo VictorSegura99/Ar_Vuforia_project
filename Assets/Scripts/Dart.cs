@@ -5,8 +5,8 @@ public class Dart : MonoBehaviour
     Vector2 startPos, endPos, direction; // touch start position, touch end position, swipe direction
     float touchTimeStart, touchTimeFinish, timeInterval; // to calculate swipe time to sontrol throw force in Z direction
 
-    public float throwForceInXandY = 1f;
-    public float throwForceInZ = 50f;
+    public float throwForceInXandY = 0f;
+    public float throwForceInZ = 1300f;
 
     Rigidbody rb;
 
@@ -27,7 +27,7 @@ public class Dart : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject.Find("GameManager").GetComponent<GameManager>().DartThrown();
+            //GameObject.Find("GameManager").GetComponent<GameManager>().DartThrown();
         }
 
         // if you touch the screen
@@ -55,8 +55,8 @@ public class Dart : MonoBehaviour
 
             // add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
             rb.isKinematic = false;
-            rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, throwForceInZ / timeInterval);
-
+            rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, (throwForceInZ / timeInterval) * 10);
+            rb.useGravity = true;
             // Destroy dart in 4 seconds
             Destroy(gameObject, 3f);
         }
