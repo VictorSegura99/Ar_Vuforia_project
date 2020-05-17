@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 class Player
 {
@@ -29,8 +31,30 @@ class Player
     public int round3 = 0;
 }
 
+enum EndMenuState { 
+    START,
+    ROUND_1,
+    ROUND_2,
+    ROUND_3,
+    TOTALS,
+    FINISHED
+}
+
 public class GameManager : MonoBehaviour
 {
+    // -------------------------
+    // END MENU TEXTS
+    public GameObject player1_round1;
+    public GameObject player1_round2;
+    public GameObject player1_round3;
+    public GameObject player2_round1;
+    public GameObject player2_round2;
+    public GameObject player2_round3;
+    public GameObject player1_totals;
+    public GameObject player2_totals;
+    // -------------------------
+
+
     public GameObject red_Dart;
     public GameObject blue_Dart;
 
@@ -54,6 +78,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject nextScene = null;
 
+    EndMenuState current_menu_state = EndMenuState.START;
+    float end_menu_time = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +98,107 @@ public class GameManager : MonoBehaviour
         if((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && activeDart == null && !inDart)
         {
             StartCoroutine(TakeDart());
+        }
+
+        if (nextScene.activeInHierarchy) 
+        {
+            switch (current_menu_state)
+            {
+                case EndMenuState.START:
+                    {
+                        if (Time.realtimeSinceStartup - end_menu_time < 0.5f)
+                        {
+                            current_menu_state = EndMenuState.ROUND_1;
+                            end_menu_time = Time.realtimeSinceStartup;
+                        }
+                        break;
+                    }
+                case EndMenuState.ROUND_1:
+                    {
+                        float t = (Time.realtimeSinceStartup - end_menu_time) / 0.5f;
+                        float lerp_1 = Mathf.Lerp(0, players[0].round1, t);
+                        float lerp_2 = Mathf.Lerp(0, players[1].round1, t);
+
+                        player1_round1.GetComponent<TextMeshPro>().text = lerp_1.ToString();
+                        player2_round1.GetComponent<TextMeshPro>().text = lerp_2.ToString();
+
+                        if (t >= 1)
+                        {
+                            player1_round1.GetComponent<TextMeshPro>().text = players[0].round1.ToString();
+                            player2_round1.GetComponent<TextMeshPro>().text = players[1].round1.ToString();
+
+                            current_menu_state = EndMenuState.ROUND_2;
+                            end_menu_time = Time.realtimeSinceStartup;
+                        }
+
+                        break;
+                    }
+                case EndMenuState.ROUND_2:
+                    {
+                        float t = (Time.realtimeSinceStartup - end_menu_time) / 0.5f;
+                        float lerp_1 = Mathf.Lerp(0, players[0].round2, t);
+                        float lerp_2 = Mathf.Lerp(0, players[1].round2, t);
+
+                        player1_round2.GetComponent<TextMeshPro>().text = lerp_1.ToString();
+                        player2_round2.GetComponent<TextMeshPro>().text = lerp_2.ToString();
+
+                        if (t >= 1)
+                        {
+                            player1_round2.GetComponent<TextMeshPro>().text = players[0].round2.ToString();
+                            player2_round2.GetComponent<TextMeshPro>().text = players[1].round2.ToString();
+
+                            current_menu_state = EndMenuState.ROUND_3;
+                            end_menu_time = Time.realtimeSinceStartup;
+                        }
+
+                        break;
+                    }
+                case EndMenuState.ROUND_3:
+                    {
+                        float t = (Time.realtimeSinceStartup - end_menu_time) / 0.5f;
+                        float lerp_1 = Mathf.Lerp(0, players[0].round3, t);
+                        float lerp_2 = Mathf.Lerp(0, players[1].round3, t);
+
+                        player1_round3.GetComponent<TextMeshPro>().text = lerp_1.ToString();
+                        player2_round3.GetComponent<TextMeshPro>().text = lerp_2.ToString();
+
+                        if (t >= 1)
+                        {
+                            player1_round3.GetComponent<TextMeshPro>().text = players[0].round3.ToString();
+                            player2_round3.GetComponent<TextMeshPro>().text = players[1].round3.ToString();
+
+                            current_menu_state = EndMenuState.TOTALS;
+                            end_menu_time = Time.realtimeSinceStartup;
+                        }
+
+                        break;
+                    }
+                case EndMenuState.TOTALS:
+                    {
+                        float t = (Time.realtimeSinceStartup - end_menu_time) / 0.5f;
+                        float lerp_1 = Mathf.Lerp(0, players[0].total_points, t);
+                        float lerp_2 = Mathf.Lerp(0, players[1].total_points, t);
+
+                        player1_totals.GetComponent<TextMeshPro>().text = lerp_1.ToString();
+                        player2_totals.GetComponent<TextMeshPro>().text = lerp_2.ToString();
+
+                        if (t >= 1)
+                        {
+                            player1_totals.GetComponent<TextMeshPro>().text = players[0].total_points.ToString();
+                            player2_totals.GetComponent<TextMeshPro>().text = players[1].total_points.ToString();
+
+                            current_menu_state = EndMenuState.FINISHED;
+                            end_menu_time = Time.realtimeSinceStartup;
+                        }
+
+                        break;
+                    }
+                case EndMenuState.FINISHED:
+                    {
+                        GameObject.Find("Main Menu").GetComponent<Button>().enabled = true;
+                        break;
+                    }
+            }
         }
     }
 
@@ -94,6 +222,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Find("ARScene").SetActive(false);
             nextScene.SetActive(true);
+            end_menu_time = Time.realtimeSinceStartup;
         }
         else {
             current_player = players[player_index];
@@ -153,5 +282,11 @@ public class GameManager : MonoBehaviour
             current_darts.Remove(current_darts.Last());
         }
         inDart = false;
+    }
+
+    IEnumerator LerpEndTexts(EndMenuState current_state)
+    {
+
+        yield return null;
     }
 }
