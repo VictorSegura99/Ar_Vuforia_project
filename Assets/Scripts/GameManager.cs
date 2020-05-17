@@ -100,13 +100,24 @@ public class GameManager : MonoBehaviour
             StartCoroutine(TakeDart());
         }
 
+        if(Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            GameObject.Find("ARScene").SetActive(false);
+            nextScene.SetActive(true);
+            players[0].round1 = 100;
+            players[0].round2 = 100;
+            players[0].round3 = 100;
+            players[0].round1 = players[0].round1 + players[0].round2 + players[0].round3;
+            end_menu_time = Time.realtimeSinceStartup;
+        }
+
         if (nextScene.activeInHierarchy) 
         {
             switch (current_menu_state)
             {
                 case EndMenuState.START:
                     {
-                        if (Time.realtimeSinceStartup - end_menu_time < 0.5f)
+                        if (Time.realtimeSinceStartup - end_menu_time > 0.5f)
                         {
                             current_menu_state = EndMenuState.ROUND_1;
                             end_menu_time = Time.realtimeSinceStartup;
@@ -195,7 +206,7 @@ public class GameManager : MonoBehaviour
                     }
                 case EndMenuState.FINISHED:
                     {
-                        if(GameObject.Find("Main Menu").GetComponent<Button>().enabled==false)
+                        if (GameObject.Find("Main Menu").GetComponent<Button>().enabled == false) 
                         {
                             GameObject.Find("Main Menu").GetComponent<Button>().enabled = true;
                         }
@@ -225,6 +236,10 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Find("ARScene").SetActive(false);
             nextScene.SetActive(true);
+            players[0].round1 = 100;
+            players[0].round2 = 100;
+            players[0].round3 = 100;
+            players[0].round1 = players[0].round1 + players[0].round2 + players[0].round3;
             end_menu_time = Time.realtimeSinceStartup;
         }
         else {
@@ -285,11 +300,5 @@ public class GameManager : MonoBehaviour
             current_darts.Remove(current_darts.Last());
         }
         inDart = false;
-    }
-
-    IEnumerator LerpEndTexts(EndMenuState current_state)
-    {
-
-        yield return null;
     }
 }
