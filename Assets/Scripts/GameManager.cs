@@ -23,6 +23,10 @@ class Player
     public int current_round_points = 0;
     public int total_points = 0;
     public int index_player = -1;
+
+    public int round1 = 0;
+    public int round2 = 0;
+    public int round3 = 0;
 }
 
 public class GameManager : MonoBehaviour
