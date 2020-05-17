@@ -195,7 +195,10 @@ public class GameManager : MonoBehaviour
                     }
                 case EndMenuState.FINISHED:
                     {
-                        GameObject.Find("Main Menu").GetComponent<Button>().enabled = true;
+                        if(GameObject.Find("Main Menu").GetComponent<Button>().enabled==false)
+                        {
+                            GameObject.Find("Main Menu").GetComponent<Button>().enabled = true;
+                        }
                         break;
                     }
             }
