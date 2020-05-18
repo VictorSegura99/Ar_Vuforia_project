@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class Dart : MonoBehaviour
 {
@@ -12,9 +14,13 @@ public class Dart : MonoBehaviour
 
     public bool isActive = false;
 
+    List<TriggerData> triggers_passed;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        triggers_passed = new List<TriggerData>();
     }
 
     // Update is called once per frame
@@ -57,8 +63,33 @@ public class Dart : MonoBehaviour
             rb.isKinematic = false;
             rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, (throwForceInZ / timeInterval) * 10);
             rb.useGravity = true;
-            // Destroy dart in 4 seconds
-            Destroy(gameObject, 3f);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<TriggerData>().absolute_trigger)
+        {
+            rb.isKinematic = true;
+
+            if(triggers_passed.Count!=0)
+            {
+                TriggerData lowest_priority = triggers_passed.First();
+
+                for (int i = 0; i < triggers_passed.Count; ++i) 
+                {
+                    if (triggers_passed[i].priority < lowest_priority.priority)
+                    {
+                        lowest_priority = triggers_passed[i];
+                    }
+                }
+
+                GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
+            }
+        }
+        else
+        {
+            triggers_passed.Add(other.gameObject.GetComponent<TriggerData>());
         }
     }
 }

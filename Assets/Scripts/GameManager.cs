@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-class Player
+public class Player
 {
     public Player(int index)
     {
@@ -68,7 +68,9 @@ public class GameManager : MonoBehaviour
 
     // Players
     List<Player> players = new List<Player>();
-    Player current_player;
+
+    [HideInInspector]
+    public Player current_player;
 
     Dart activeDart = null;
 
@@ -104,17 +106,6 @@ public class GameManager : MonoBehaviour
         if((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && activeDart == null && !inDart)
         {
             StartCoroutine(TakeDart());
-        }
-
-        if(Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            GameObject.Find("ARScene").SetActive(false);
-            nextScene.SetActive(true);
-            players[0].round1 = 100;
-            players[0].round2 = 100;
-            players[0].round3 = 100;
-            players[0].total_points = players[0].round1 + players[0].round2 + players[0].round3;
-            end_menu_time = Time.realtimeSinceStartup;
         }
 
         if (nextScene.activeInHierarchy) 
@@ -239,6 +230,21 @@ public class GameManager : MonoBehaviour
 
         if (current_darts.Count == 0)
         {
+            if (current_round >= 5)
+            {
+                current_player.round3 = current_player.current_round_points;
+            }
+            else if (current_round >= 3)
+            {
+                current_player.round2 = current_player.current_round_points;
+            }
+            else
+            {
+                current_player.round1 = current_player.current_round_points;
+            }
+
+            current_player.current_round_points = 0;
+
             current_player = players[current_player.GetOtherPlayer()];
             NewRound(current_player.index_player);
         }
@@ -280,7 +286,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 current_darts[i].transform.SetPositionAndRotation(
-                      new Vector3(current_darts[i].transform.position.x + (i - 1) * 0.2f, 0, -0.45f),
+                      new Vector3(current_darts[i].transform.position.x + (i - 1) * 0.2f, 0, -36.0f),
                        Quaternion.Euler(-5, 0, 45));
             }
         }
