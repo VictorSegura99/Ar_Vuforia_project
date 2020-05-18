@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviour
             Destroy(darts_thrown[i]);
             darts_thrown[i] = null;
         }
+        darts_thrown.Clear();
 
         if (current_round >= 5)
         {
@@ -324,6 +325,7 @@ public class GameManager : MonoBehaviour
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
         }
+
         inDart = false;
     }
 }
