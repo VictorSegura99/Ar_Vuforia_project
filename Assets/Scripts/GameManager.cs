@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 class Player
@@ -90,7 +91,8 @@ public class GameManager : MonoBehaviour
         }
 
         nextScene.SetActive(true);
-        GameObject.Find("Main Menu").GetComponent<Button>().interactable = false;
+        GameObject.Find("MainMenuSceneText").GetComponent<TextMeshProUGUI>().enabled = false;
+
         nextScene.SetActive(false);
 
         NewRound(0);
@@ -210,10 +212,20 @@ public class GameManager : MonoBehaviour
                     }
                 case EndMenuState.FINISHED:
                     {
-                        if (GameObject.Find("Main Menu").GetComponent<Button>().interactable == false) 
+                        if (Time.realtimeSinceStartup - end_menu_time > 0.5f)
                         {
-                            GameObject.Find("Main Menu").GetComponent<Button>().interactable = true;
+                            if (GameObject.Find("MainMenuSceneText").GetComponent<TextMeshProUGUI>().enabled == false)
+                            {
+                                GameObject.Find("MainMenuSceneText").GetComponent<TextMeshProUGUI>().enabled = true;
+                            }
+
+                            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+                            {
+                                Debug.Log("Main Menu Going!");
+                                SceneManager.LoadScene("MainMenu");
+                            }
                         }
+
                         break;
                     }
             }
