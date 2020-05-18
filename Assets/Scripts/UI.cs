@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,12 +6,13 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     [HideInInspector]
-    public TextMeshPro points;
+    public TextMeshProUGUI points;
 
     // Start is called before the first frame update
     void Start()
     {
-        points = gameObject.transform.GetChild(1).GetComponent<TextMeshPro>();
+        Transform points_GO = gameObject.transform.GetChild(1);
+        points = points_GO.GetComponent <TextMeshProUGUI>();
         points.text = "0";
     }
 

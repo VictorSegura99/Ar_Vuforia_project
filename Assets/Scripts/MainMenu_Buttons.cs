@@ -18,6 +18,7 @@ public class MainMenu_Buttons : MonoBehaviour
 
     public void MainMenuButton()
     {
+        Debug.Log("Main Menu Going!");
         SceneManager.LoadScene("MainMenu");
     }
 }
