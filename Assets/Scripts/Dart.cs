@@ -62,6 +62,8 @@ public class Dart : MonoBehaviour
             // add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
             rb.isKinematic = false;
             rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, (throwForceInZ / timeInterval) * 10);
+            GameObject.Find("GameManager").GetComponent<GameManager>().darts_thrown.Add(gameObject);
+            GameObject.Find("GameManager").GetComponent<GameManager>().current_darts.Remove(gameObject);
             rb.useGravity = true;
         }
     }
@@ -72,7 +74,7 @@ public class Dart : MonoBehaviour
         {
             rb.isKinematic = true;
 
-            if(triggers_passed.Count!=0)
+            if (triggers_passed.Count != 0) 
             {
                 TriggerData lowest_priority = triggers_passed.First();
 

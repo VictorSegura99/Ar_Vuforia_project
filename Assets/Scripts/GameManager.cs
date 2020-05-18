@@ -62,7 +62,8 @@ public class GameManager : MonoBehaviour
     public float dart_transition_time = 0.5f;
 
     // Internal variables
-    List<GameObject> current_darts = new List<GameObject>();
+    public List<GameObject> current_darts = new List<GameObject>();
+    public List<GameObject> darts_thrown = new List<GameObject>();
     float time_at_lerp_start = 0.0f;
     Transform original_dart_transform;
 
@@ -225,29 +226,29 @@ public class GameManager : MonoBehaviour
 
     public void DartThrown()
     {
-        Destroy(activeDart.gameObject);
-        activeDart = null;
-
-        if (current_darts.Count == 0)
+        for (int i = 0; i < darts_thrown.Count; ++i)
         {
-            if (current_round >= 5)
-            {
-                current_player.round3 = current_player.current_round_points;
-            }
-            else if (current_round >= 3)
-            {
-                current_player.round2 = current_player.current_round_points;
-            }
-            else
-            {
-                current_player.round1 = current_player.current_round_points;
-            }
-
-            current_player.current_round_points = 0;
-
-            current_player = players[current_player.GetOtherPlayer()];
-            NewRound(current_player.index_player);
+            Destroy(darts_thrown[i]);
+            darts_thrown[i] = null;
         }
+
+        if (current_round >= 5)
+        {
+            current_player.round3 = current_player.current_round_points;
+        }
+        else if (current_round >= 3)
+        {
+            current_player.round2 = current_player.current_round_points;
+        }
+        else
+        {
+            current_player.round1 = current_player.current_round_points;
+        }
+
+        current_player.current_round_points = 0;
+
+        current_player = players[current_player.GetOtherPlayer()];
+        NewRound(current_player.index_player);
     }
 
     void NewRound(int player_index)
