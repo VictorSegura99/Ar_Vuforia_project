@@ -24,7 +24,7 @@ public class UI : MonoBehaviour
 
     public void UpdateCurrentPlayerPoints(int new_points)
     {
-        StartCoroutine(LerpPoints(int.Parse(this.points.text) + new_points, int.Parse(this.points.text)));
+        StartCoroutine(LerpPoints(int.Parse(points.text) + new_points, int.Parse(points.text)));
     }
     
     IEnumerator LerpPoints(int current_points, int previous_points)
@@ -33,11 +33,11 @@ public class UI : MonoBehaviour
 
         while (current_points != previous_points) 
         {
-            points.text = Mathf.Lerp(previous_points, current_points, (time - Time.realtimeSinceStartup) / 0.5f).ToString();
+            points.text = Mathf.Lerp(previous_points, current_points, (Time.realtimeSinceStartup - time) / 0.5f).ToString();
 
-            if (((time - Time.realtimeSinceStartup) / 0.5f) >= 1)
+            if (((Time.realtimeSinceStartup - time) / 0.5f) >= 1) 
             {
-                current_points = previous_points;
+                previous_points = current_points;
                 points.text = current_points.ToString();
             }
 

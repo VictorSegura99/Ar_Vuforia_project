@@ -87,6 +87,12 @@ public class Dart : MonoBehaviour
                 }
 
                 GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
+                GameObject.Find("Points").GetComponent<UI>().UpdateCurrentPlayerPoints(lowest_priority.points);
+            }
+
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().darts_thrown.Count >= 3) 
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("DartThrown", 0.5f);
             }
         }
         else
