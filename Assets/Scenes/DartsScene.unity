@@ -2783,7 +2783,7 @@ MonoBehaviour:
     type: 3}
   dart_transition_time: 0.5
   current_darts: []
-  darts_thrown: []
+  activeDart: {fileID: 0}
   nextScene: {fileID: 281742274}
 --- !u!4 &1436776123
 Transform:
@@ -3711,6 +3711,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208480824662736637, guid: 24d88d5fe02c35e48b1d23717197312f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208480824662736637, guid: 24d88d5fe02c35e48b1d23717197312f,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208480824662736637, guid: 24d88d5fe02c35e48b1d23717197312f,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2782726700603165934, guid: 24d88d5fe02c35e48b1d23717197312f,
         type: 3}
