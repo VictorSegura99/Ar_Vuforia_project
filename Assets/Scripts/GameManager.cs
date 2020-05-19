@@ -101,11 +101,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(activeDart == null && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
-        {
-            TakeDart();
-        }
-
         if (nextScene.activeInHierarchy) 
         {
             switch (current_menu_state)
@@ -218,6 +213,11 @@ public class GameManager : MonoBehaviour
                         break;
                     }
             }
+        }
+
+        if (activeDart == null && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
+        {
+            TakeDart();
         }
     }
 
