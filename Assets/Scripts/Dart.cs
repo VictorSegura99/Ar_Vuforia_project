@@ -73,30 +73,33 @@ public class Dart : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<TriggerData>().absolute_trigger)
+        if (!other.gameObject.CompareTag("Player"))
         {
-            rb.isKinematic = true;
-            GetComponent<AudioSource>().Play();
-
-            if (triggers_passed.Count != 0)
+            if (other.gameObject.GetComponent<TriggerData>().absolute_trigger)
             {
-                TriggerData lowest_priority = triggers_passed.First();
+                rb.isKinematic = true;
+                GetComponent<AudioSource>().Play();
 
-                for (int i = 0; i < triggers_passed.Count; ++i)
+                if (triggers_passed.Count != 0)
                 {
-                    if (triggers_passed[i].priority < lowest_priority.priority)
-                    {
-                        lowest_priority = triggers_passed[i];
-                    }
-                }
+                    TriggerData lowest_priority = triggers_passed.First();
 
-                GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
-                GameObject.Find("Points").GetComponent<UI>().UpdateCurrentPlayerPoints(lowest_priority.points);
+                    for (int i = 0; i < triggers_passed.Count; ++i)
+                    {
+                        if (triggers_passed[i].priority < lowest_priority.priority)
+                        {
+                            lowest_priority = triggers_passed[i];
+                        }
+                    }
+
+                    GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
+                    GameObject.Find("Canvas").GetComponent<UI>().UpdateCurrentPlayerPoints(lowest_priority.points);
+                }
             }
-        }
-        else
-        {
-            triggers_passed.Add(other.gameObject.GetComponent<TriggerData>());
+            else
+            {
+                triggers_passed.Add(other.gameObject.GetComponent<TriggerData>());
+            }
         }
     }
 }

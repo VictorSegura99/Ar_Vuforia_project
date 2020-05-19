@@ -22,6 +22,16 @@ public class UI : MonoBehaviour
         
     }
 
+    public void SetZero()
+    {
+        points.text = "0";
+    }
+
+    public int GetPoints()
+    {
+        return int.Parse(points.text);
+    }
+
     public void UpdateCurrentPlayerPoints(int new_points)
     {
         StartCoroutine(LerpPoints(int.Parse(points.text) + new_points, int.Parse(points.text)));

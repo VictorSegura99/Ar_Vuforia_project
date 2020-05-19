@@ -74,9 +74,10 @@ public class GameManager : MonoBehaviour
     public Dart activeDart = null;
 
     int total_round = 6;
-    int current_round = 1;
+    int current_round = 0;
 
     public GameObject nextScene = null;
+    public GameObject currScene = null;
 
     EndMenuState current_menu_state = EndMenuState.START;
     float end_menu_time = 0.0f;
@@ -224,30 +225,32 @@ public class GameManager : MonoBehaviour
     {
         if (current_round >= 5)
         {
-            current_player.round3 = current_player.current_round_points;
+            current_player.round3 = GameObject.Find("Canvas").GetComponent<UI>().GetPoints();
         }
         else if (current_round >= 3)
         {
-            current_player.round2 = current_player.current_round_points;
+            current_player.round2 = GameObject.Find("Canvas").GetComponent<UI>().GetPoints();
         }
         else
         {
-            current_player.round1 = current_player.current_round_points;
+            current_player.round1 = GameObject.Find("Canvas").GetComponent<UI>().GetPoints();
         }
+
+        GameObject.Find("Canvas").GetComponent<UI>().SetZero();
 
         current_player.current_round_points = 0;
     }
 
     void NewRound(int player_index)
     {
-        if (player_index != 0)
+        if (current_round != 0)
             UpdatePoints();
 
         ++current_round;
 
         if (current_round > total_round)
         {
-            GameObject.Find("ARScene").SetActive(false);
+            currScene.SetActive(false);
             nextScene.SetActive(true);
 
             for (int i = 0; i < 2; ++i) 
