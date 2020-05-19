@@ -33,12 +33,12 @@ public class UI : MonoBehaviour
 
         while (current_points != previous_points) 
         {
-            points.text = Mathf.Lerp(previous_points, current_points, (Time.realtimeSinceStartup - time) / 0.5f).ToString();
+            points.text = ((int)Mathf.Lerp(previous_points, current_points, (Time.realtimeSinceStartup - time) / 0.5f)).ToString();
 
             if (((Time.realtimeSinceStartup - time) / 0.5f) >= 1) 
             {
                 previous_points = current_points;
-                points.text = current_points.ToString();
+                points.text = ((int)current_points).ToString();
             }
 
             yield return new WaitForEndOfFrame();

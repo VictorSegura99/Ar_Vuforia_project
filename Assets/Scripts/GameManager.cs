@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour
     // Internal variables
     public List<GameObject> current_darts = new List<GameObject>();
     public List<GameObject> darts_thrown = new List<GameObject>();
-    float time_at_lerp_start = 0.0f;
     Transform original_dart_transform;
 
     // Players
@@ -77,8 +76,6 @@ public class GameManager : MonoBehaviour
 
     int total_round = 6;
     int current_round = 0;
-
-    bool inDart = false;
 
     public GameObject nextScene = null;
 
@@ -104,9 +101,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && activeDart == null && !inDart)
+        if((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && activeDart == null)
         {
-            StartCoroutine(TakeDart());
+            TakeDart();
         }
 
         if (nextScene.activeInHierarchy) 
@@ -294,9 +291,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator TakeDart()
+    void TakeDart()
     {
-        inDart = true;
         if (activeDart != null)
         {
             Destroy(activeDart.gameObject);
@@ -305,19 +301,8 @@ public class GameManager : MonoBehaviour
 
         if (current_darts.Count != 0)
         {
-
             current_darts.Last().transform.SetParent(GameObject.Find("ARCamera").transform);
             original_dart_transform = current_darts.Last().transform;
-
-            time_at_lerp_start = Time.realtimeSinceStartup;
-
-            while (((Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time) < 1.0f)
-            {
-                Vector3.Lerp(original_dart_transform.localPosition, new Vector3(0, -0.45f, 1.25f), (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time);
-                Quaternion.Lerp(original_dart_transform.localRotation, Quaternion.Euler(0, 180, 0), (Time.realtimeSinceStartup - time_at_lerp_start) / dart_transition_time);
-
-                yield return new WaitForEndOfFrame();
-            }
 
             current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
             current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -325,7 +310,5 @@ public class GameManager : MonoBehaviour
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
         }
-
-        inDart = false;
     }
 }
