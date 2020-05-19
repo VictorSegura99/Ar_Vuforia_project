@@ -69,6 +69,7 @@ public class Dart : MonoBehaviour
         {
             rb.isKinematic = true;
             GetComponent<AudioSource>().Play();
+
             if (triggers_passed.Count != 0) 
             {
                 TriggerData lowest_priority = triggers_passed.First();
