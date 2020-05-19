@@ -13,13 +13,13 @@ public class Dart : MonoBehaviour
     Rigidbody rb;
 
     public bool isActive = false;
-
+    bool throww = false;
     List<TriggerData> triggers_passed;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+
         triggers_passed = new List<TriggerData>();
     }
 
@@ -31,7 +31,7 @@ public class Dart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isActive)
+        if (!isActive || throww)
         {
             return;
         }
@@ -60,52 +60,42 @@ public class Dart : MonoBehaviour
             direction = startPos - endPos;
 
             // add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
+            rb.useGravity = true;
             rb.isKinematic = false;
             rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, (throwForceInZ / timeInterval) * 10);
-            GameObject.Find("GameManager").GetComponent<GameManager>().darts_thrown.Add(gameObject);
-            GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("ResetActual", 1);
-            GameObject.Find("GameManager").GetComponent<GameManager>().current_darts.Remove(gameObject);
-            rb.useGravity = true;
-            Invoke("DestroyGO", 3);
-        }
-    }
 
-    public void DestroyGO()
-    {
-        Destroy(gameObject);
+            Destroy(gameObject, 3.0F);
+            GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("ActiveDart", 1.3F);
+            throww = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<TriggerData>().absolute_trigger)
-        {
-            rb.isKinematic = true;
-            GetComponent<AudioSource>().Play();
+        //if (other.gameObject.GetComponent<TriggerData>().absolute_trigger)
+        //{
+        //    rb.isKinematic = true;
+        //    GetComponent<AudioSource>().Play();
 
-            if (triggers_passed.Count != 0) 
-            {
-                TriggerData lowest_priority = triggers_passed.First();
+        //    if (triggers_passed.Count != 0) 
+        //    {
+        //        TriggerData lowest_priority = triggers_passed.First();
 
-                for (int i = 0; i < triggers_passed.Count; ++i) 
-                {
-                    if (triggers_passed[i].priority < lowest_priority.priority)
-                    {
-                        lowest_priority = triggers_passed[i];
-                    }
-                }
+        //        for (int i = 0; i < triggers_passed.Count; ++i) 
+        //        {
+        //            if (triggers_passed[i].priority < lowest_priority.priority)
+        //            {
+        //                lowest_priority = triggers_passed[i];
+        //            }
+        //        }
 
-                GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
-                GameObject.Find("Points").GetComponent<UI>().UpdateCurrentPlayerPoints(lowest_priority.points);
-            }
-
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().darts_thrown.Count >= 3) 
-            {
-                GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("DartThrown", 0.5f);
-            }
-        }
-        else
-        {
-            triggers_passed.Add(other.gameObject.GetComponent<TriggerData>());
-        }
+        //        GameObject.Find("GameManager").GetComponent<GameManager>().current_player.current_round_points += lowest_priority.points;
+        //        GameObject.Find("Points").GetComponent<UI>().UpdateCurrentPlayerPoints(lowest_priority.points);
+        //    }
+        //}
+        //else
+        //{
+        //    triggers_passed.Add(other.gameObject.GetComponent<TriggerData>());
+        //}
     }
 }

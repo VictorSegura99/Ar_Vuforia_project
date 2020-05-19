@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
 
     // Internal variables
     public List<GameObject> current_darts = new List<GameObject>();
-    public List<GameObject> darts_thrown = new List<GameObject>();
     Transform original_dart_transform;
 
     // Players
@@ -72,10 +71,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public Player current_player;
 
-    Dart activeDart = null;
+    public Dart activeDart = null;
 
     int total_round = 6;
-    int current_round = 0;
+    int current_round = 1;
 
     public GameObject nextScene = null;
 
@@ -221,20 +220,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetActual()
+    public void UpdatePoints()
     {
-        activeDart = null;
-    }
-
-    public void DartThrown()
-    {
-        for (int i = 0; i < darts_thrown.Count; ++i)
-        {
-            Destroy(darts_thrown[i]);
-            darts_thrown[i] = null;
-        }
-        darts_thrown.Clear();
-
         if (current_round >= 5)
         {
             current_player.round3 = current_player.current_round_points;
@@ -249,13 +236,13 @@ public class GameManager : MonoBehaviour
         }
 
         current_player.current_round_points = 0;
-
-        current_player = players[current_player.GetOtherPlayer()];
-        NewRound(current_player.index_player);
     }
 
     void NewRound(int player_index)
     {
+        if (player_index != 0)
+            UpdatePoints();
+
         ++current_round;
 
         if (current_round > total_round)
@@ -273,10 +260,7 @@ public class GameManager : MonoBehaviour
         else {
             current_player = players[player_index];
 
-            if (current_darts.Count != 0)
-            {
-                current_darts.Clear();
-            }
+            current_darts.Clear();
 
             for (int i = 0; i < 3; ++i)
             {
@@ -296,6 +280,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ActiveDart()
+    {
+        activeDart = null;
+    }
+
     void TakeDart()
     {
         if (current_darts.Count != 0)
@@ -308,6 +297,10 @@ public class GameManager : MonoBehaviour
             current_darts.Last().GetComponent<Dart>().Invoke("SetActiveDart", 0.3F);
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
+        }
+        else
+        {
+            NewRound(current_player.GetOtherPlayer());
         }
     }
 }
