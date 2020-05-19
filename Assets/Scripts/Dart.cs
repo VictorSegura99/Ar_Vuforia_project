@@ -19,7 +19,7 @@ public class Dart : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+        rb.isKinematic = true;
         triggers_passed = new List<TriggerData>();
     }
 
@@ -29,11 +29,6 @@ public class Dart : MonoBehaviour
         if (!isActive)
         {
             return;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            //GameObject.Find("GameManager").GetComponent<GameManager>().DartThrown();
         }
 
         // if you touch the screen

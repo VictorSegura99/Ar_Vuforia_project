@@ -285,7 +285,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 current_darts[i].transform.SetPositionAndRotation(
-                      new Vector3(current_darts[i].transform.position.x + (i - 1) * 0.2f, 0, -36.0f),
+                      new Vector3(current_darts[i].transform.position.x + (i - 1) * 20, 0.2f, -90.0f),
                        Quaternion.Euler(-5, 0, 45));
             }
         }
@@ -293,19 +293,13 @@ public class GameManager : MonoBehaviour
 
     void TakeDart()
     {
-        if (activeDart != null)
-        {
-            Destroy(activeDart.gameObject);
-            activeDart = null;
-        }
-
         if (current_darts.Count != 0)
         {
             current_darts.Last().transform.SetParent(GameObject.Find("ARCamera").transform);
             original_dart_transform = current_darts.Last().transform;
 
-            current_darts.Last().transform.localPosition = new Vector3(0, -0.45f, 1.25f);
-            current_darts.Last().transform.localRotation = Quaternion.Euler(0, 180, 0);
+            current_darts.Last().transform.localPosition = new Vector3(0, -5, 25);
+            current_darts.Last().transform.localRotation = Quaternion.Euler(1.25f, 180, 45);
             current_darts.Last().GetComponent<Dart>().isActive = true;
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
