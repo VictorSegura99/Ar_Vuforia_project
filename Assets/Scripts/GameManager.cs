@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && activeDart == null)
+        if(activeDart == null && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
         {
             TakeDart();
         }
@@ -221,6 +221,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetActual()
+    {
+        activeDart = null;
+    }
+
     public void DartThrown()
     {
         for (int i = 0; i < darts_thrown.Count; ++i)
@@ -300,7 +305,7 @@ public class GameManager : MonoBehaviour
 
             current_darts.Last().transform.localPosition = new Vector3(0, -5, 25);
             current_darts.Last().transform.localRotation = Quaternion.Euler(1.25f, 180, 45);
-            current_darts.Last().GetComponent<Dart>().isActive = true;
+            current_darts.Last().GetComponent<Dart>().Invoke("SetActiveDart", 0.3F);
             activeDart = current_darts.Last().GetComponent<Dart>();
             current_darts.Remove(current_darts.Last());
         }
