@@ -23,6 +23,11 @@ public class Dart : MonoBehaviour
         triggers_passed = new List<TriggerData>();
     }
 
+    public void SetActiveDart()
+    {
+        isActive = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -58,9 +63,16 @@ public class Dart : MonoBehaviour
             rb.isKinematic = false;
             rb.AddForce(-direction.x * throwForceInXandY, -direction.y * throwForceInXandY, (throwForceInZ / timeInterval) * 10);
             GameObject.Find("GameManager").GetComponent<GameManager>().darts_thrown.Add(gameObject);
+            GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("ResetActual", 1);
             GameObject.Find("GameManager").GetComponent<GameManager>().current_darts.Remove(gameObject);
             rb.useGravity = true;
+            Invoke("DestroyGO", 3);
         }
+    }
+
+    public void DestroyGO()
+    {
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
