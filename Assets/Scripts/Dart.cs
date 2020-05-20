@@ -62,8 +62,7 @@ public class Dart : MonoBehaviour
             // add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
             rb.useGravity = true;
             rb.isKinematic = false;
-            Physics.gravity = new Vector3(0,-300, 0);
-            rb.AddForce(-direction.x * 100, -direction.y * 25, (throwForceInZ / timeInterval) * 10);
+            rb.AddForce(-direction.x * 100, -direction.y * 25, (throwForceInZ / timeInterval) * 15);
 
             Destroy(gameObject, 3.0F);
             GameObject.Find("GameManager").GetComponent<GameManager>().Invoke("ActiveDart", 1.3F);
